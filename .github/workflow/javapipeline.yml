@@ -1,0 +1,42 @@
+name: java spring app sample workflow
+
+#triggers
+on: 
+  push:
+    branches: ["master","main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+#actions
+jobs: 
+  build: 
+    runs-on: ubuntu:latest
+
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@4
+
+    - name: setup jdk 23
+      uses: actions/setup-java@v3
+      with:
+        distribution: "temurin"
+        java-version: "23"
+
+    - name: build jar file
+      run: |
+        ./mvnw clean package
+
+    - name: login to docker hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: build docker image
+      run: |
+        docker build -t cquincy09/java-gh:v1.0 .
+    
+    - name: tag and push to docker hub
+      run: |
+        docker push cquincy09/java-gh:v1.0
