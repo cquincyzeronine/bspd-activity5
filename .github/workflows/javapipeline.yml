@@ -11,7 +11,7 @@ on:
 #actions
 jobs: 
   build: 
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: checkout repository
