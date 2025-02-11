@@ -23,8 +23,11 @@ jobs:
         distribution: "temurin"
         java-version: "23"
 
+
+
     - name: build jar file
       run: |
+        chmod +x mvnw
         ./mvnw clean package
 
     - name: login to docker hub
